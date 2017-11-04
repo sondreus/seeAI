@@ -10,7 +10,7 @@
 #' @param debug Only plot subset of lambda values? Defaults to FALSE.
 #' @param debug.n If plotting subset of lambda values, sets number of values to plot. Defaults to 100. 
 #' @param ... Options passed to saveHTML or saveGIF functions. See ?animate::saveHTML and ?animate::saveGIF 
-#' @keywords glmnet lasso cv.glmnet machinelearning
+#' @keywords glmnet lasso cv.glmnet machinelearning seeAI
 #' @export
 #' @examples
 #' # See also: ?cv.glmnet: 
@@ -138,6 +138,10 @@ animate_glmnet <- function(cv.glmnet, plot.cvm = TRUE, plot.cv.folds = TRUE, tot
     }
     
     p1 <- p1 + geom_polygon(aes(y=value + ifelse(plot.data$value == 0, 0, ifelse(plot.data$value > 0, 0.1*ymax, -0.1*ymax))), fill = NA, alpha=0.7, color = "black")+theme_bw()+geom_segment(aes(x=max(coef.number)*(i/itr)), xend=0, yend = ymax, y=ymax, size = 2, col = "skyblue", alpha=0.3)+xlab("")+ylab("")+geom_segment(aes(y=value, xend=coef.number), yend=0, color = ifelse(plot.data$value > 0, "darkgreen", "skyblue"))+theme(axis.text.x = element_blank(), axis.text.y = element_blank(), panel.border = element_blank(), axis.ticks.y = element_blank())+ylim(ymin*1.1, ymax*1.1)
+    
+    # if(captions == TRUE){
+    #   p1 <- p1 + 
+    # }
     
     print(p1)
     
