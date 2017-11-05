@@ -46,6 +46,8 @@ animate_glmnet <- function(cv.glmnet, plot.cvm = TRUE, plot.cv.folds = TRUE, tot
       stop()
   }
   
+  cv.folds <- length(cv.glmnet$lambda)
+  
   ymax <-   100 * 1.2
   ymin <- - 100 * 1.2
   

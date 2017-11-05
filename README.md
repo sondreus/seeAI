@@ -43,6 +43,8 @@ animate_glmnet(cvob1)
 
 ```
 
+![](example.gif)
+
 Arguments:
 ----------
 
@@ -59,7 +61,6 @@ Arguments:
 
 Explanation and detail
 ----------------------
-
 
 
 Acknowledgements
