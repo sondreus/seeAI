@@ -11,8 +11,8 @@ Written by Sondre U. Solstad, Princeton University (<ssolstad@princeton.edu>). S
 
 
 
-
-<center>![](animate_glmnet.gif)</center>
+<center><img src="animate_glmnet.gif" alt="LASSO coordinate descent and cross-validation">
+</center>
 
 
 
@@ -49,8 +49,8 @@ cvob1 <- cv.glmnet(x,y)
 animate_glmnet(cvob1)
 
 ```
-
-<center>![](example.gif)</center>
+<center><img src="example.gif" alt="animate_glmnet example gif">
+</center>
 
 Arguments:
 ----------
