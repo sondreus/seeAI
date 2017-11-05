@@ -41,7 +41,7 @@ animate_glmnet <- function(cv.glmnet, plot.cvm = TRUE, plot.cv.folds = TRUE, tot
     cv.glmnet <- cv.glmnet(x, y, nfolds = cv.folds, lambda = sample(cv.glmnet$lambda, debug.n))
   }
   
-  if(class(example.cv.glmnet) != "cv.glmnet"){
+  if(class(cv.glmnet) != "cv.glmnet"){
       message("Please supply an object of class cv.glmnet")
       stop()
   }
