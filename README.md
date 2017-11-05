@@ -9,6 +9,13 @@ This package provides functions for visualizing AI / Machine Learning. Currently
 
 Written by Sondre U. Solstad, Princeton University (<ssolstad@princeton.edu>). Send me an email if you find this package useful or want to suggest an improvement or feature.
 
+
+
+
+<center>![](animate_glmnet.gif)</center>
+
+
+
 Installation instructions:
 
 ``` r
@@ -17,7 +24,7 @@ install_github("sondreus/seeAI")
 ```
 
 
-animate_glmnet:
+Example:
 --------
 
 ``` r
@@ -43,7 +50,7 @@ animate_glmnet(cvob1)
 
 ```
 
-![](example.gif)
+<center>![](example.gif)</center>
 
 Arguments:
 ----------
