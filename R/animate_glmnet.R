@@ -263,7 +263,7 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
   if(save.html == TRUE){
     saveHTML(ani.replay(), htmlfile = paste0(html.index, "_glmnet.html"), title = paste0(html.index, "_glmnet.html"), ...)
   } else {
-    saveGIF(ani.replay(), movie.name = paste0(html.index, "_glmnet.gif"), cmd.fun = system, ...)
+    saveGIF(ani.replay(), movie.name = paste0(html.index, "_glmnet.gif"), cmd.fun = shell, ...)
   }
   if(replay == TRUE){
     print(ani.replay())
