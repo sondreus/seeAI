@@ -2,16 +2,19 @@
 #'
 #' This function visualizes the a cv.glmnet machine learning process.
 #' @param cv.glmnet An object of class 'cv.glmnet'
-#' @param replay Should the animation be replayed in the visual device? Defaults to TRUE.
-#' @param plot.cvm Should cross-validation error be plotted? Defaults to TRUE.
-#' @param plot.cv.folds Should cross-validation folds be plotted? Defaults to TRUE.
+#' @param replay Should the animation be replayed in the visual device? Defaults to FALSE.
+#' @param plot.cv Should cross-validation be plotted? Defaults to TRUE.
 #' @param total.time Desired time of animation in seconds. Defaults to 10.
 #' @param new.save Should this animation be saved as a new object rather than overwrite the preceeding animation? Defaults to TRUE.
 #' @param save.html Save as HTML? Defaults to TRUE. If FALSE, saves GIF.
 #' @param debug Only plot subset of lambda values? Defaults to FALSE.
-#' @param debug.n If plotting subset of lambda values, sets number of values to plot. Defaults to 100.
+#' @param debug.n If plotting subset of lambda values, sets number of values to plot. Defaults to 10.
+#' @param captions Should captions be added to animation? Defaults to FALSE.
+#' @param captions.alt Should alternative captions be added to animation? Defaults to FALSE.
+#' @param transition.n How many frames should be used to transition between cross-validation and model fit? Defaults to 10.
 #' @param ... Options passed to saveHTML or saveGIF functions. See ?animate::saveHTML and ?animate::saveGIF
 #' @keywords glmnet lasso cv.glmnet machinelearning seeAI
+#' @aliases seeAI
 #' @export
 #' @examples
 #' # See also: ?cv.glmnet:
@@ -30,9 +33,7 @@
 #' cvob1=cv.glmnet(x,y)
 #' animate_glmnet(cvob1)
 
-cv.glmnet <- cvob1
-
-animate_glmnet <- function(cv.glmnet, replay = FALSE, plot.cvm = TRUE, plot.cv.folds = TRUE, total.time = 10, new.save = TRUE, save.html = TRUE, debug = FALSE, debug.n = 100, captions = TRUE, alt.captions = FALSE, transition.n = 10, ...) {
+animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = 10, new.save = TRUE, save.html = TRUE, debug = FALSE, debug.n = 10, captions = TRUE, alt.captions = FALSE, transition.n = 10, ...) {
 
   # ... are passed to saveGIF or save HTML.
 
@@ -40,7 +41,7 @@ animate_glmnet <- function(cv.glmnet, replay = FALSE, plot.cvm = TRUE, plot.cv.f
 
   # Debug
   if(debug == TRUE){
-    cv.glmnet <- cv.glmnet(x, y, nfolds = cv.folds, lambda = sample(cv.glmnet$lambda, debug.n))
+    cv.glmnet <- cv.glmnet(x, y, nfolds = 20, lambda = sample(cv.glmnet$lambda, debug.n))
   }
 
   if(class(cv.glmnet) != "cv.glmnet"){
@@ -48,7 +49,7 @@ animate_glmnet <- function(cv.glmnet, replay = FALSE, plot.cvm = TRUE, plot.cv.f
       stop()
   }
 
-  cv.folds <- length(cv.glmnet$lambda)
+  cv.folds <- 10
 
   ymax <-   100 * 1.2
   ymin <- - 100 * 1.2
@@ -60,12 +61,8 @@ animate_glmnet <- function(cv.glmnet, replay = FALSE, plot.cvm = TRUE, plot.cv.f
   # Getting number of possible coefficients
   n <- nrow(coef(cv.glmnet$glmnet.fit)[-1, ])
 
-  if(plot.cvm == TRUE){
-    if(plot.cv.folds == TRUE){
+  if(plot.cv == TRUE){
       total.frames <- itr*2
-    } else {
-      total.frames <- itr*2
-    }
   } else {
     total.frames <- itr
   }
@@ -167,7 +164,7 @@ animate_glmnet <- function(cv.glmnet, replay = FALSE, plot.cvm = TRUE, plot.cv.f
 
   }
 
-  if(plot.cvm == TRUE){
+  if(plot.cv == TRUE){
     require(gridExtra)
     cvm.index <- 1
 
@@ -200,7 +197,7 @@ animate_glmnet <- function(cv.glmnet, replay = FALSE, plot.cvm = TRUE, plot.cv.f
         p.cvm <- ggplot(right.cvm.data, aes(y = cve, x = as.character(lam)))+geom_point()+geom_segment(aes(x=as.factor(lam), xend=as.factor(lam), yend = cve - cvsd, y=cve + cvsd), size = 2, col = "skyblue", alpha=0.3)+theme_bw() +xlab("")+ylab("")+theme(plot.caption = element_text(hjust=0.5, size=rel(1)), panel.grid.major = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank(), panel.border = element_blank(), axis.ticks.y = element_blank(), axis.ticks.x = element_blank(), plot.margin = unit(c(5.5, 11.0, 5.5, 5.5), "points"))+geom_point(aes(x=as.character(lam)[k], y = cve[k]), size = 3)+ylim(min(min(right.cvm.data$cve-right.cvm.data$cvsd)*0.9, min(right.cvm.data$cve-right.cvm.data$cvsd)), max(right.cvm.data$cve+right.cvm.data$cvsd)*1.1)
 
         if(captions){
-          cap <- paste0("Performing ", cv.folds, "-fold cross-validation\nLambda = ", rev(round(cv.glmnet$lambda, 2))[k], "\nNon-zero coefficients = ", cv.glmnet$nzero[k])
+          cap <- paste0("Performing cross-validation\nLambda = ", rev(round(cv.glmnet$lambda, 2))[k], "\nNon-zero coefficients = ", cv.glmnet$nzero[k])
 
           p3 <- p3+labs(caption=cap)
 
@@ -210,7 +207,7 @@ animate_glmnet <- function(cv.glmnet, replay = FALSE, plot.cvm = TRUE, plot.cv.f
           }
 
         if(alt.captions){
-          cap <- paste0("Splitting data into ", cv.folds, " parts\nSelecting features of theory with complexity level ", 100*(round(rev(cv.glmnet$lambda[k]), 2)-1), "%\nExclude one part of data and generate theory based on these features \nTest theory on excluded data, repeat until all parts excluded and tested")
+          cap <- paste0("Splitting data into parts\nSelecting features of theory with complexity level ", 100*(round(rev(cv.glmnet$lambda[k]), 2)-1), "%\nExclude one part of data and generate theory based on these features \nTest theory on excluded data, repeat until all parts excluded and tested")
 
           p3 <- p3+labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(0.6)))
 
