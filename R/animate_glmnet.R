@@ -33,7 +33,7 @@
 #' cvob1=cv.glmnet(x,y)
 #' animate_glmnet(cvob1)
 
-animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = 10, new.save = TRUE, save.html = TRUE, debug = FALSE, debug.n = 10, captions = TRUE, alt.captions = FALSE, transition.n = 10, ...) {
+animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = 10, new.save = TRUE, save.html = TRUE, debug = FALSE, debug.n = 10, captions = FALSE, alt.captions = FALSE, transition.n = 10, ...) {
 
   # ... are passed to saveGIF or save HTML.
 
