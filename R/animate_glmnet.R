@@ -4,7 +4,7 @@
 #' @param cv.glmnet An object of class 'cv.glmnet'
 #' @param replay Should the animation be replayed in the visual device? Defaults to FALSE.
 #' @param plot.cv Should cross-validation be plotted? Defaults to TRUE.
-#' @param total.time Desired time of animation in seconds. Defaults to 10.
+#' @param total.time Desired time of animation in seconds. Defaults to 15 if plot.cv selected, else 10.
 #' @param new.save Should this animation be saved as a new object rather than overwrite the preceeding animation? Defaults to TRUE.
 #' @param save.html Save as HTML? Defaults to TRUE. If FALSE, saves GIF.
 #' @param debug Only plot subset of lambda values? Defaults to FALSE.
@@ -33,7 +33,7 @@
 #' cvob1=cv.glmnet(x,y)
 #' animate_glmnet(cvob1)
 
-animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = 10, new.save = TRUE, save.html = TRUE, debug = FALSE, debug.n = 10, captions = FALSE, alt.captions = FALSE, transition.n = 10, ...) {
+animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = ifelse(plot.cv, 15, 10), new.save = TRUE, save.html = TRUE, debug = FALSE, debug.n = 10, captions = FALSE, alt.captions = FALSE, transition.n = 10, ...) {
 
   # ... are passed to saveGIF or save HTML.
 
@@ -135,17 +135,17 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
       old_old_value <- old_value
     }
 
-    p1 <- p1 + geom_polygon(aes(y=value + ifelse(plot.data$value == 0, 0, ifelse(plot.data$value > 0, 0.1*ymax, -0.1*ymax))), fill = NA, alpha=0.7, color = "black")+theme_bw()+geom_segment(aes(x=max(coef.number)*(i/itr)), xend=0, yend = ymax, y=ymax, size = 2, col = "skyblue", alpha=0.3)+xlab("")+ylab("")+geom_segment(aes(y=value, xend=coef.number), yend=0, color = ifelse(plot.data$value > 0, "darkgreen", "skyblue"))+theme(plot.caption = element_text(hjust=0.5, size=rel(1.2)), axis.text.x = element_blank(), axis.text.y = element_blank(), panel.border = element_blank(), axis.ticks.y = element_blank())+ylim(ymin*1.1, ymax*1.1)+xlim(0, plot.n)
+    p1 <- p1 + geom_polygon(aes(y=value + ifelse(plot.data$value == 0, 0, ifelse(plot.data$value > 0, 0.1*ymax, -0.1*ymax))), fill = NA, alpha=0.7, color = "black")+theme_bw()+geom_segment(aes(x=max(coef.number)*(i/itr)), xend=0, yend = ymax, y=ymax, size = 2, col = "skyblue", alpha=0.3)+xlab("")+ylab("")+geom_segment(aes(y=value, xend=coef.number), yend=0, color = ifelse(plot.data$value > 0, "darkgreen", "skyblue"))+theme(plot.caption = element_text(hjust=0.5, size=rel(1)), axis.text.x = element_blank(), axis.text.y = element_blank(), panel.border = element_blank(), axis.ticks.y = element_blank())+ylim(ymin*1.1, ymax*1.1)+xlim(0, plot.n)
 
       if(captions){
 
-          cap <- paste0("Fitting models while decreasing max model complexity\nBound for sum of absolute value of coefficients (lambda) < ", round(cv.glmnet$lambda[i], 2), "\nNon-zero coefficients = ", rev(cv.glmnet$nzero)[i])
+          cap <- paste0("Fitting models while decreasing max model complexity\nSum of absolute value of coefficients < ", round(cv.glmnet$lambda[i], 3), " (lambda)\nNon-zero coefficients = ", rev(cv.glmnet$nzero)[i])
 
         p1 <- p1 + labs(caption=cap)
       }
 
       if(alt.captions){
-        cap <- paste0("Constructing possible theories based data\nGradually limiting the complexity of theories\nRelevant features of current theory = ", rev(cv.glmnet$nzero)[i])
+        cap <- paste0("Constructing possible theories based on data\nGradually limiting the complexity of theories\nRelevant features of current theory = ", rev(cv.glmnet$nzero)[i], "\n")
 
         p1 <- p1 + labs(caption=cap)
       }
@@ -197,7 +197,7 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
         p.cvm <- ggplot(right.cvm.data, aes(y = cve, x = as.character(lam)))+geom_point()+geom_segment(aes(x=as.factor(lam), xend=as.factor(lam), yend = cve - cvsd, y=cve + cvsd), size = 2, col = "skyblue", alpha=0.3)+theme_bw() +xlab("")+ylab("")+theme(plot.caption = element_text(hjust=0.5, size=rel(1)), panel.grid.major = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank(), panel.border = element_blank(), axis.ticks.y = element_blank(), axis.ticks.x = element_blank(), plot.margin = unit(c(5.5, 11.0, 5.5, 5.5), "points"))+geom_point(aes(x=as.character(lam)[k], y = cve[k]), size = 3)+ylim(min(min(right.cvm.data$cve-right.cvm.data$cvsd)*0.9, min(right.cvm.data$cve-right.cvm.data$cvsd)), max(right.cvm.data$cve+right.cvm.data$cvsd)*1.1)
 
         if(captions){
-          cap <- paste0("Performing cross-validation\nLambda = ", rev(round(cv.glmnet$lambda, 2))[k], "\nNon-zero coefficients = ", cv.glmnet$nzero[k])
+          cap <- paste0("Performing cross-validation\nLambda = ", rev(round(cv.glmnet$lambda, 3))[k], "\nNon-zero coefficients = ", cv.glmnet$nzero[k])
 
           p3 <- p3+labs(caption=cap)
 
@@ -207,11 +207,11 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
           }
 
         if(alt.captions){
-          cap <- paste0("Splitting data into parts\nSelecting features of theory with complexity level ", 100*(round(rev(cv.glmnet$lambda[k]), 2)-1), "%\nExclude one part of data and generate theory based on these features \nTest theory on excluded data, repeat until all parts excluded and tested")
+          cap <- paste0("Splitting data into parts\nSelecting features of theory with complexity level ", 100*(round(rev(cv.glmnet$lambda[k]/max(cv.glmnet$lambda)), 2)), "%\nExclude one part of data and generate theory based on these features \nTest theory on excluded data, repeat until all parts excluded and tested")
 
           p3 <- p3+labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(0.6)))
 
-          cap <- paste0("\n\nPlot average error of theories by complexity level\nSelect complexity level based on errors\nUse the theory with this complexity level generated on full data")
+          cap <- paste0("\n\nPlot average error of theories by complexity level\nSelect complexity level based on errors\nUse theory with this complexity level generated on full data")
 
           p.cvm <- p.cvm+labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(0.6)))
         }

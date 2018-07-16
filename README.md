@@ -10,10 +10,9 @@ This package provides functions for visualizing AI / Machine Learning. Currently
 Written by Sondre U. Solstad, Princeton University (<ssolstad@princeton.edu>). Send me an email if you find this package useful or want to suggest an improvement or feature.
 
 
+**Lasso coordinate descent and cross-validation:**
 
-<center><img src="animate_glmnet.gif" alt="LASSO coordinate descent and cross-validation">
-</center>
-
+![](2_glmnet.gif)
 
 
 Installation instructions:
@@ -49,8 +48,6 @@ cvob1 <- cv.glmnet(x,y)
 animate_glmnet(cvob1)
 
 ```
-<center><img src="example.gif" alt="animate_glmnet example gif">
-</center>
 
 Arguments:
 ----------
@@ -63,12 +60,23 @@ Arguments:
 -   **new.save** Should this animation be saved as a new object rather than overwrite the preceeding animation? Defaults to TRUE.
 -   **save.html** Save as HTML? Defaults to TRUE. If FALSE, saves GIF.
 -   **debug** Only plot subset of lambda values? Defaults to FALSE.
--   **debug.n** If plotting subset of lambda values, sets number of values to plot. Defaults to 100. 
-
+-   **debug.n** If plotting subset of lambda values, sets number of values to plot. Defaults to 10. 
+-   **captions** Should captions be added to animation? Defaults to FALSE.
+-   **captions.alt** Should alternative captions be added to animation? Defaults to FALSE.
+-   **transition.n** How many frames should be used to transition between cross-validation and model fit? Defaults to 10.
+-   **...** Options passed to saveHTML or saveGIF functions. See ?animate::saveHTML and ?animate::saveGIF
 
 Explanation and detail
 ----------------------
+Line segments are coefficients, outward from the central circle being positive and inward negative. As the complexity parameter ("lambda") is being reduced, the size and number of non-zero coefficients decreases. Once the process is complete, a cross-validation procedure selects the ideal model (with the cross-validation error and the standard deviation of this error plotted on the right). Typically, the simplest model with a cross-validation error less than one standard deviation more than the model with the lowest the cross-validation error is preferred. 
 
+With Captions (Alt. 1)
+----------------------
+![](2_glmnet_cap.gif)
+
+With Captions (Alt. 2)
+----------------------
+![](2_glmnet_cap_alt.gif)
 
 Acknowledgements
 ----------------
