@@ -147,7 +147,7 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
       if(alt.captions){
         cap <- paste0("Constructing possible theories based on data\nGradually limiting the complexity of theories\nRelevant features of current theory = ", rev(cv.glmnet$nzero)[i], "\n")
 
-        p1 <- p1 + labs(caption=cap)
+        p1 <- p1 + labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(0.6)))
       }
 
       print(p1)
@@ -207,7 +207,7 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
           }
 
         if(alt.captions){
-          cap <- paste0("Splitting data into parts\nSelecting features of theory with complexity level ", 100*(round(rev(cv.glmnet$lambda[k]/max(cv.glmnet$lambda)), 2)), "%\nExclude one part of data and generate theory based on these features \nTest theory on excluded data, repeat until all parts excluded and tested")
+          cap <- paste0("Splitting data into parts\nSelecting features of theory with complexity level ", 100*(1-round(rev(cv.glmnet$lambda[k]/max(cv.glmnet$lambda)), 2)), "%\nExclude one part of data and generate theory based on these features \nTest theory on excluded data, repeat until done on all parts")
 
           p3 <- p3+labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(0.6)))
 
