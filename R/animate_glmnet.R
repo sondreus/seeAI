@@ -148,7 +148,7 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
       if(alt.captions){
         cap <- paste0("Constructing possible theories based on data\nGradually limiting the complexity of theories\nRelevant features of current theory = ", rev(cv.glmnet$nzero)[i], "\n")
 
-        p1 <- p1 + labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(0.6)))
+        p1 <- p1 + labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(2)))
       }
 
       print(p1)
@@ -210,11 +210,11 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
         if(alt.captions){
           cap <- paste0("Splitting data into parts\nSelecting features of theory with complexity level ", 100*(1-round(rev(cv.glmnet$lambda[k]/max(cv.glmnet$lambda)), 2)), "%\nExclude one part of data and generate theory based on these features \nTest theory on excluded data, repeat until done on all parts")
 
-          p3 <- p3+labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(0.6)))
+          p3 <- p3+labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(2)))
 
           cap <- paste0("\n\nPlot average error of theories by complexity level\nSelect complexity level based on errors\nUse theory with this complexity level generated on full data")
 
-          p.cvm <- p.cvm+labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(0.6)))
+          p.cvm <- p.cvm+labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(2)))
         }
 
         if(k %in% c(1:transition.n)){
