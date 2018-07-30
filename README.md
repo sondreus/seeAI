@@ -52,16 +52,15 @@ animate_glmnet(cvob1)
 Arguments:
 ----------
 
-
 -   **cv.glmnet** An object of class 'cv.glmnet'
--   **plot.cvm** Should cross-validation error be plotted? Defaults to TRUE.
--   **plot.cv.folds** Should cross-validation folds be plotted? Defaults to TRUE.
--   **total.time** Desired time of animation in seconds. Defaults to 10.
+-   **replay** Should the animation be replayed in the visual device? Defaults to FALSE.
+-   **plot.cv** Should cross-validation error be plotted? Defaults to TRUE.
+-   **total.time** Desired time of animation in seconds. Defaults to 15 if plot.cv selected, else 10.
 -   **new.save** Should this animation be saved as a new object rather than overwrite the preceeding animation? Defaults to TRUE.
--   **save.html** Save as HTML? Defaults to TRUE. If FALSE, saves GIF.
+-   **save** Save as "html" or "gif"? Defaults to "html".
 -   **debug** Only plot subset of lambda values? Defaults to FALSE.
 -   **debug.n** If plotting subset of lambda values, sets number of values to plot. Defaults to 10. 
--   **captions** Should captions be added to animation? Defaults to FALSE.
+-   **captions** Should captions be added to animation? Defaults to FALSE. 
 -   **captions.alt** Should alternative captions be added to animation? Defaults to FALSE.
 -   **transition.n** How many frames should be used to transition between cross-validation and model fit? Defaults to 10.
 -   **...** Options passed to saveHTML or saveGIF functions. See ?animate::saveHTML and ?animate::saveGIF

@@ -6,7 +6,7 @@
 #' @param plot.cv Should cross-validation be plotted? Defaults to TRUE.
 #' @param total.time Desired time of animation in seconds. Defaults to 15 if plot.cv selected, else 10.
 #' @param new.save Should this animation be saved as a new object rather than overwrite the preceeding animation? Defaults to TRUE.
-#' @param save.html Save as HTML? Defaults to TRUE. If FALSE, saves GIF.
+#' @param save Save as "html" or "gif"? Defaults to "html".
 #' @param debug Only plot subset of lambda values? Defaults to FALSE.
 #' @param debug.n If plotting subset of lambda values, sets number of values to plot. Defaults to 10.
 #' @param captions Should captions be added to animation? Defaults to FALSE.
@@ -31,9 +31,9 @@
 #' ly=rbinom(n=length(px),prob=px,size=1)
 #' set.seed(1011)
 #' cvob1=cv.glmnet(x,y)
-#' animate_glmnet(cvob1, captions = TRUE)
+#' animate_glmnet(cvob1)
 
-animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = ifelse(plot.cv, 15, 10), new.save = TRUE, save.html = TRUE, debug = FALSE, debug.n = 10, captions = FALSE, alt.captions = FALSE, transition.n = 10, ...) {
+animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = ifelse(plot.cv, 15, 10), new.save = TRUE, save = "html", debug = FALSE, debug.n = 10, captions = FALSE, alt.captions = FALSE, transition.n = 10, ...) {
 
   # ... are passed to saveGIF or save HTML.
 
@@ -151,7 +151,12 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
         p1 <- p1 + labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(2)))
       }
 
+    if(plot.cv == FALSE | transition.n > 0){
       print(p1)
+    } else {
+      library(gridExtra)
+      suppress <- capture.output(print(suppressWarnings(grid.arrange(p1, ggplot()+theme_bw()+theme(plot.caption = element_text(hjust=0.5, size=rel(2)), axis.text.x = element_blank(), axis.text.y = element_blank(), panel.border = element_blank(), axis.ticks.y = element_blank()), nrow = 1))))
+    }
 
     old_value <- plot.data$value + ifelse(plot.data$value == 0, 0, ifelse(plot.data$value > 0, 0.1*ymax, -0.1*ymax))
 
@@ -166,7 +171,7 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
   }
 
   if(plot.cv == TRUE){
-    require(gridExtra)
+    library(gridExtra)
     cvm.index <- 1
 
     right.cvm.data <- cbind.data.frame(cve = cv.glmnet$cvm, cvsd = cv.glmnet$cvsd, lam = cv.glmnet$lambda)
@@ -183,7 +188,7 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
       cvm.temp <- cvm.df[1:min(k,nrow(cvm.df)), ]
 
       suppressWarnings(
-        p2 <- p1 + geom_ribbon(data = cvm.temp, aes(x=xpos, ymin=cvm, ymax=cvm.ymax, y= 0), fill = "deepskyblue", color = "deepskyblue")
+        p2 <- p1 + geom_ribbon(data = cvm.temp, aes(x=xpos, xend=0, ymin=cvm, ymax=cvm.ymax, y= 0), fill = "deepskyblue", color = "deepskyblue")
       )
 
         if(cv.folds > 50){
@@ -197,26 +202,48 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
 
         p.cvm <- ggplot(right.cvm.data, aes(y = cve, x = as.character(lam)))+geom_point()+geom_segment(aes(x=as.factor(lam), xend=as.factor(lam), yend = cve - cvsd, y=cve + cvsd), size = 2, col = "skyblue", alpha=0.3)+theme_bw() +xlab("")+ylab("")+theme(plot.caption = element_text(hjust=0.5, size=rel(2)), panel.grid.major = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank(), panel.border = element_blank(), axis.ticks.y = element_blank(), axis.ticks.x = element_blank(), plot.margin = unit(c(5.5, 11.0, 5.5, 5.5), "points"))+geom_point(aes(x=as.character(lam)[k], y = cve[k]), size = 3)+ylim(min(min(right.cvm.data$cve-right.cvm.data$cvsd)*0.9, min(right.cvm.data$cve-right.cvm.data$cvsd)), max(right.cvm.data$cve+right.cvm.data$cvsd)*1.1)
 
+        if(k %in% itr){
+
+          p1 <- ggplot(plot.data, aes(y=value, x=coef.number)) + geom_polygon(aes(y=value + ifelse(plot.data$value == 0, 0, ifelse(plot.data$value > 0, 0.1*ymax, -0.1*ymax))), fill = NA, alpha=0.7, color = "black")+ coord_polar(start = 0, direction = 1)+theme_bw()+geom_segment(aes(x=max(coef.number)), xend=0, yend = ymax, y=ymax, size = 2, col = "white", alpha=0.1) +xlab("")+ylab("")+theme(plot.caption = element_text(hjust=0.5, size=rel(2)), axis.text.x = element_blank(), axis.text.y = element_blank(), panel.border = element_blank(), axis.ticks.y = element_blank())+ylim(ymin*1.1, ymax*1.1)+xlim(0, plot.n)+geom_segment(aes(y=value, xend=coef.number), yend=0, color = ifelse(plot.data$value > 0, "darkgreen", "skyblue"))
+
+          suppressWarnings(
+            p2 <- p1 + geom_ribbon(data = cvm.temp, aes(x=xpos, xend=0, ymin=cvm, ymax=cvm.ymax, y= 0), fill = "white", color = "white", alpha = 0.2)
+          )
+
+          p3 <- p2 + geom_point(data = cbind.data.frame(x=((1:plot.cv.folds.n)*(plot.n/plot.cv.folds.n) - 0.5*(plot.n/plot.cv.folds.n)), y = -0.1*ymax), aes(x=x, y=y), shape = 23, color = "gray", size = 2, fill = "white")
+          p3 <- p3 + geom_point(data = cbind.data.frame(x=((sample(1:plot.cv.folds.n, 1))*(plot.n/plot.cv.folds.n) - 0.5*(plot.n/plot.cv.folds.n)), y = -0.1*ymax), aes(x=x, y=y), shape = 23, fill = "white", color = "white", size = 2)
+        }
+
         if(captions){
           cap <- paste0("Performing cross-validation\nLambda = ", rev(round(cv.glmnet$lambda, 3))[k], "\nNon-zero coefficients = ", cv.glmnet$nzero[k])
 
           p3 <- p3+labs(caption=cap)
 
+          if(!k %in% c(1:transition.n, itr - c(1:transition.n), itr)){
           cap <- paste0("Mean SE = ", round(right.cvm.data$cve[k], 2), "\n(Error SD = ", round(right.cvm.data$cvsd[k], 2), ")")
+          } else {
+            cap <- " \n "
+          }
 
           p.cvm <- p.cvm+labs(caption=cap)
           }
 
+
         if(alt.captions){
-          cap <- paste0("Splitting data into parts\nSelecting features of theory with complexity level ", 100*(1-round(rev(cv.glmnet$lambda[k]/max(cv.glmnet$lambda)), 2)), "%\nExclude one part of data and generate theory based on these features \nTest theory on excluded data, repeat until done on all parts")
+          cap <- paste0("Splitting data into parts, exclude one\n On non-excluded data, generate theory with complexity level ", 100*(1-round(rev(cv.glmnet$lambda[k]/max(cv.glmnet$lambda)), 2)), "%\nTest theory on excluded data, repeat until done on all parts")
 
           p3 <- p3+labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(2)))
 
-          cap <- paste0("\n\nPlot average error of theories by complexity level\nSelect complexity level based on errors\nUse theory with this complexity level generated on full data")
+          if(! k %in% c(1:transition.n, itr - c(1:transition.n), itr)){
+          cap <- paste0("\nPlot average error of theories by complexity level\nSelect complexity level based on errors\nUse theory with this complexity level generated on full data")
+          } else {
+            cap <- paste0("\n\n\n")
+          }
 
           p.cvm <- p.cvm+labs(caption=cap)+theme(plot.caption = element_text(hjust=0.5, size=rel(2)))
-        }
+          }
 
+        if(transition.n > 0){
         if(k %in% c(1:transition.n)){
 
           suppress <- capture.output(print(suppressWarnings(grid.arrange(p3, p.cvm, nrow = 1, widths = c((transition.n*2-(k))/(transition.n*2), k/(transition.n*2))))))
@@ -227,13 +254,16 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
           suppress <- capture.output(print(suppressWarnings(grid.arrange(p3, p.cvm, nrow = 1, widths = c(1-(transition.n + (itr - k))/(2*transition.n)+0.5, (transition.n + (itr - k))/(2*transition.n)-0.5)  ))))
         }
 
-        if(k %in% itr){
 
+        if(k %in% itr){
           suppress <- capture.output(print(p3))
         }
 
         if(!(k %in% c(itr, c(1:transition.n), (itr - c(1:transition.n))))){
 
+          suppress <- capture.output(print(suppressWarnings(grid.arrange(p3, p.cvm, nrow = 1))))
+        }
+        } else {
           suppress <- capture.output(print(suppressWarnings(grid.arrange(p3, p.cvm, nrow = 1))))
         }
 
@@ -261,7 +291,7 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
 
   html.index <- html.index + 1
 
-  if(save.html == TRUE){
+  if(save == "html"){
     saveHTML(ani.replay(), htmlfile = paste0(html.index, "_glmnet.html"), title = paste0(html.index, "_glmnet.html"), ...)
   } else {
     saveGIF(ani.replay(), movie.name = paste0(html.index, "_glmnet.gif"), cmd.fun = shell, ...)

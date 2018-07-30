@@ -5,9 +5,10 @@
 \alias{seeAI}
 \title{Animate glmnet}
 \usage{
-animate_glmnet(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = 10,
-  new.save = TRUE, save.html = TRUE, debug = FALSE, debug.n = 10,
-  captions = TRUE, alt.captions = FALSE, transition.n = 10, ...)
+animate_glmnet(cv.glmnet, replay = FALSE, plot.cv = TRUE,
+  total.time = ifelse(plot.cv, 15, 10), new.save = TRUE, save = "html",
+  debug = FALSE, debug.n = 10, captions = FALSE, alt.captions = FALSE,
+  transition.n = 10, ...)
 }
 \arguments{
 \item{cv.glmnet}{An object of class 'cv.glmnet'}
@@ -16,11 +17,11 @@ animate_glmnet(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = 10,
 
 \item{plot.cv}{Should cross-validation be plotted? Defaults to TRUE.}
 
-\item{total.time}{Desired time of animation in seconds. Defaults to 10.}
+\item{total.time}{Desired time of animation in seconds. Defaults to 15 if plot.cv selected, else 10.}
 
 \item{new.save}{Should this animation be saved as a new object rather than overwrite the preceeding animation? Defaults to TRUE.}
 
-\item{save.html}{Save as HTML? Defaults to TRUE. If FALSE, saves GIF.}
+\item{save}{Save as "html" or "gif"? Defaults to "html".}
 
 \item{debug}{Only plot subset of lambda values? Defaults to FALSE.}
 
