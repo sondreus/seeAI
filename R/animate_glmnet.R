@@ -37,7 +37,8 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
 
   # ... are passed to saveGIF or save HTML.
 
-  require(animation)
+  library(animation)
+  library(ggplot2)
 
   # Debug
   if(debug == TRUE){
