@@ -82,4 +82,4 @@ With Captions (Alt. 2)
 Acknowledgements
 ----------------
 
-This package relies on the *glmnet* package by Jerome Friedman, Trevor Hastie, Noah Simon and Rob Tibshirani, and the *animation* package by Yihui Xie.
+This package relies on the *glmnet* package by Jerome Friedman, Trevor Hastie, Noah Simon and Rob Tibshirani, the *animation* package by Yihui Xie, and *ggplot2* developed by Hadley Wickham, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, and Kara Woo.
