@@ -5,9 +5,11 @@ Sondre U. Solstad
 Visualizations of AI "thinking" in R
 ==========================
 
-This package provides functions for visualizing AI / Machine Learning. Currently only one learning process is supported, namely LASSO regression with cross-validation. 
+This package provides functions for visualizing AI / Machine Learning. 
 
-Written by Sondre U. Solstad, Princeton University (<ssolstad@princeton.edu>). Send me an email if you find this package useful or want to suggest an improvement or feature.
+Written by Sondre U. Solstad, Princeton University (<ssolstad@princeton.edu>). Let me know if you find this package useful or want to suggest an improvement or feature.
+
+At present, one learning process is supported, namely LASSO regression with cross-validation. 
 
 
 **Lasso coordinate descent and cross-validation:**
@@ -67,7 +69,7 @@ Arguments:
 
 Explanation and detail
 ----------------------
-Line segments are coefficients, outward from the central circle being positive and inward negative. As the complexity parameter ("lambda") is being reduced, the size and number of non-zero coefficients decreases. Once the process is complete, a cross-validation procedure selects the ideal model (with the cross-validation error and the standard deviation of this error plotted on the right). Typically, the simplest model with a cross-validation error less than one standard deviation more than the model with the lowest the cross-validation error is preferred. 
+Line segments are coefficients, outward from the central circle being positive and inward negative. As the complexity parameter ("lambda") is reduced, the size and number of non-zero coefficients decrease. Once the process is complete, a cross-validation procedure selects the ideal model (with the cross-validation error and the standard deviation of this error plotted on the right). Typically, the simplest model with the lowest cross-validation error or an error less than one standard deviation more than the model with the lowest the cross-validation error is preferred. 
 
 With Captions (Alt. 1)
 ----------------------

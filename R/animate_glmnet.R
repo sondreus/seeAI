@@ -118,7 +118,6 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
   pb <- txtProgressBar(min = 0, max = total.frames, style = 3)
 
   for(i in 1:itr){
-    #print(paste("Model fit - Percent complete:", 100*round(i/itr, 2), "%"))
 
     plot.data <- coef.values[(1:plot.n) + plot.n * (i - 1), ]
 
@@ -200,7 +199,10 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
         p3 <- p2 + geom_point(data = cbind.data.frame(x=((1:plot.cv.folds.n)*(plot.n/plot.cv.folds.n) - 0.5*(plot.n/plot.cv.folds.n)), y = -0.1*ymax), aes(x=x, y=y), shape = 23, color = "gray", size = 2, fill = "white")
         p3 <- p3 + geom_point(data = cbind.data.frame(x=((sample(1:plot.cv.folds.n, 1))*(plot.n/plot.cv.folds.n) - 0.5*(plot.n/plot.cv.folds.n)), y = -0.1*ymax), aes(x=x, y=y), shape = 23, fill = "skyblue", color = "gray", size = 2)
 
-        p.cvm <- ggplot(right.cvm.data, aes(y = cve, x = as.character(lam)))+geom_point()+geom_segment(aes(x=as.factor(lam), xend=as.factor(lam), yend = cve - cvsd, y=cve + cvsd), size = 2, col = "skyblue", alpha=0.3)+theme_bw() +xlab("")+ylab("")+theme(plot.caption = element_text(hjust=0.5, size=rel(2)), panel.grid.major = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank(), panel.border = element_blank(), axis.ticks.y = element_blank(), axis.ticks.x = element_blank(), plot.margin = unit(c(5.5, 11.0, 5.5, 5.5), "points"))+geom_point(aes(x=as.character(lam)[k], y = cve[k]), size = 3)+ylim(min(min(right.cvm.data$cve-right.cvm.data$cvsd)*0.9, min(right.cvm.data$cve-right.cvm.data$cvsd)), max(right.cvm.data$cve+right.cvm.data$cvsd)*1.1)
+        temp.right.cvm.data <- right.cvm.data
+        temp.right.cvm.data[(k+1):nrow(temp.right.cvm.data), 1:2] <- NA
+
+        p.cvm <- ggplot(temp.right.cvm.data, aes(y = cve, x = as.character(lam)))+geom_point()+geom_segment(aes(x=as.factor(lam), xend=as.factor(lam), yend = cve - cvsd, y=cve + cvsd), size = 2, col = "skyblue", alpha=0.3)+theme_bw() +xlab("")+ylab("")+theme(plot.caption = element_text(hjust=0.5, size=rel(2)), panel.grid.major = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank(), panel.border = element_blank(), axis.ticks.y = element_blank(), axis.ticks.x = element_blank(), plot.margin = unit(c(5.5, 11.0, 5.5, 5.5), "points"))+geom_point(aes(x=as.character(lam)[k], y = cve[k]), size = 3)+ylim(min(min(right.cvm.data$cve-right.cvm.data$cvsd)*0.9, min(right.cvm.data$cve-right.cvm.data$cvsd)), max(right.cvm.data$cve+right.cvm.data$cvsd)*1.1)
 
         if(k %in% itr){
 
