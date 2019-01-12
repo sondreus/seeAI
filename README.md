@@ -69,7 +69,7 @@ Arguments:
 
 Explanation and detail
 ----------------------
-Line segments are coefficients, outward from the central circle being positive and inward negative. As the complexity parameter ("lambda") is reduced, the size and number of non-zero coefficients decrease. Once the process is complete, a cross-validation procedure selects the ideal model (with the cross-validation error and the standard deviation of this error plotted on the right). Typically, the simplest model with the lowest cross-validation error or an error less than one standard deviation more than the model with the lowest the cross-validation error is preferred. 
+Line segments are coefficients, outward from the central circle being positive and inward negative. As the complexity penalization parameter ("lambda") is increased, the size and number of non-zero coefficients decrease. Once the process is complete, a cross-validation procedure selects the ideal model (with the cross-validation error and the standard deviation of this error plotted on the right). Typically, the simplest model with the lowest cross-validation error or an error less than one standard deviation more than the model with the lowest the cross-validation error is preferred. 
 
 With Captions (Alt. 1)
 ----------------------
