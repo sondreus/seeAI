@@ -31,9 +31,9 @@
 #' ly=rbinom(n=length(px),prob=px,size=1)
 #' set.seed(1011)
 #' cvob1=cv.glmnet(x,y)
-#' animate_glmnet(cvob1, captions = TRUE, )
+#' animate_glmnet(cvob1, captions = TRUE, ani.height = 1000, ani.width = 2000, transition.n = 0)
 
-animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = ifelse(plot.cv, 15, 10), new.save = TRUE, save = "html", debug = FALSE, debug.n = 10, captions = FALSE, alt.captions = FALSE, transition.n = 10, ...) {
+animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = ifelse(plot.cv, 15, 10), new.save = TRUE, save = "html", debug = FALSE, debug.n = 10, captions = FALSE, alt.captions = FALSE, transition.n = 0, ...) {
 
   # ... are passed to saveGIF or save HTML.
 

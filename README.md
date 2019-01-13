@@ -65,7 +65,7 @@ Arguments:
 -   **captions** Should captions be added to animation? Defaults to FALSE. 
 -   **captions.alt** Should alternative captions be added to animation? Defaults to FALSE.
 -   **transition.n** How many frames should be used to transition between cross-validation and model fit? Defaults to 10.
--   **...** Options passed to saveHTML or saveGIF functions. See ?animate::saveHTML and ?animate::saveGIF
+-   **...** Options passed to saveHTML or saveGIF functions, such as "ani.width = 1000, ani.height = 500". See ?animate::saveHTML and ?animate::saveGIF
 
 Explanation and detail
 ----------------------
