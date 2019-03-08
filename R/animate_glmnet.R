@@ -31,7 +31,7 @@
 #' ly=rbinom(n=length(px),prob=px,size=1)
 #' set.seed(1011)
 #' cvob1=cv.glmnet(x,y)
-#' animate_glmnet(cvob1, alt.captions = TRUE, ani.height = 1000, ani.width = 2000, transition.n = 0, save = "GIF")
+#' animate_glmnet(cvob1, alt.captions = TRUE, ani.height = 750, ani.width = 1500, transition.n = 0, save = "GIF", total.time = 15)
 
 animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, total.time = ifelse(plot.cv, 15, 10), new.save = TRUE, save = "html", debug = FALSE, debug.n = 10, captions = FALSE, alt.captions = FALSE, transition.n = 10, ...) {
 
