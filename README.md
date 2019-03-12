@@ -5,11 +5,11 @@ Sondre U. Solstad
 Visualizations of AI "thinking" in R
 ==========================
 
-This package provides functions for visualizing AI / Machine Learning. 
+How do machines learn? I wrote a program that animates how a computer thinks. As we rely more and more on machines to make decisions, I believe that understanding - and seeing - how they formulate a theory to make that decision is important. This package provides functions for visualizing and animating AI / Machine Learning model construction processes. 
 
 Written by Sondre U. Solstad, Princeton University (<ssolstad@princeton.edu>). Let me know if you find this package useful or want to suggest an improvement or feature.
 
-At present, one learning process is supported, namely LASSO regression with cross-validation. 
+Current function supports LASSO regression with cross-validation as implemented by the popular *glmnet* package. 
 
 
 **Lasso coordinate descent and cross-validation:**
@@ -78,6 +78,18 @@ With Captions (Alt. 1)
 With Captions (Alt. 2)
 ----------------------
 ![](2_glmnet_cap_alt.gif)
+
+Examples
+----------------
+AI generating a theory about what predicts victory in sports based on ~500 variables from 5000 matches.
+![](glmnet_sports.gif)
+
+
+AI generating a theory about what predicts if an email is spam or not based on ~50 variables and 4600 emails.
+
+![](glmnet_email.gif)
+
+
 
 Acknowledgements
 ----------------
