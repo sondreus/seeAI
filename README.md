@@ -90,6 +90,10 @@ AI generating a theory about what predicts if an email is spam or not based on ~
 ![](glmnet_email.gif)
 
 
+Citation:
+----------------
+Solstad, Sondre Ulvund (2018). *seeAI: Visualizations of Machine Learning Processes*. https://github.com/sondreus/seeAI#seeai
+
 
 Acknowledgements
 ----------------
