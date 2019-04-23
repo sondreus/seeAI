@@ -30,6 +30,7 @@
 #' px=px/(1+px)
 #' ly=rbinom(n=length(px),prob=px,size=1)
 #' set.seed(1011)
+#' library(glmnet)
 #' cvob1=cv.glmnet(x,y)
 #' animate_glmnet(cvob1, alt.captions = TRUE, ani.height = 750, ani.width = 1500, transition.n = 0, save = "GIF", total.time = 15)
 
@@ -63,7 +64,7 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
   n <- nrow(coef(cv.glmnet$glmnet.fit)[-1, ])
 
   if(plot.cv == TRUE){
-      total.frames <- itr*2
+    total.frames <- itr*2
   } else {
     total.frames <- itr
   }
@@ -74,7 +75,6 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
   suppressMessages(oopt <- ani.options(nmax = total.frames, interval = wait.time))
 
   ani.record(reset = TRUE)
-
 
   # Define Percentile Function
   percentile <- function (dat)
@@ -106,8 +106,12 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
   for(i in 1:itr){
     coef.values <- rbind(coef.values, cbind.data.frame(label = paste("Coefficient", 1:plot.n), value = as.numeric(coef(cv.glmnet$glmnet.fit, s=rev(cv.glmnet$lambda)[i])[-1]), coef.number = 1:plot.n))
   }
-  if(length(coef.values$value[coef.values$value > 0]) > 0){coef.values$value[coef.values$value > 0] <- percentile(coef.values$value[coef.values$value > 0]) }
-  if(length(coef.values$value[coef.values$value < 0]) > 0){coef.values$value[coef.values$value < 0] <- - percentile( - coef.values$value[coef.values$value < 0]) }
+  if(length(coef.values$value[coef.values$value > 0]) > 0){
+    coef.values$value[coef.values$value > 0] <- percentile(coef.values$value[coef.values$value > 0])
+    }
+  if(length(coef.values$value[coef.values$value < 0]) > 0){
+    coef.values$value[coef.values$value < 0] <- - percentile( - coef.values$value[coef.values$value < 0])
+    }
 
   ##
   # Generate animation
@@ -159,12 +163,10 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
     old_value <- plot.data$value + ifelse(plot.data$value == 0, 0, ifelse(plot.data$value > 0, 0.1*ymax, -0.1*ymax))
 
     ani.record()
-    ani.pause(wait.time)
 
     setTxtProgressBar(pb, index)
 
     index <- index + 1
-
 
   }
 
@@ -270,7 +272,6 @@ animate_glmnet <- seeAI <- function(cv.glmnet, replay = FALSE, plot.cv = TRUE, t
         }
 
         ani.record()
-        ani.pause(wait.time)
 
         setTxtProgressBar(pb, index)
         index <- index + 1
