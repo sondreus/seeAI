@@ -7,7 +7,7 @@ Visualizations of AI "thinking" in R
 
 How do machines learn? I wrote a program that animates how a computer thinks. As we rely more and more on machines to make decisions, I believe that understanding - and seeing - how they formulate a theory to make that decision is important. This package provides functions for visualizing and animating AI / Machine Learning model construction processes. 
 
-Written by Sondre U. Solstad, Princeton University (<ssolstad@princeton.edu>). Let me know if you find this package useful or want to suggest an improvement or feature.
+Written by Sondre U. Solstad, Princeton University (<sondreus@gmail.com>). Let me know if you find this package useful or want to suggest an improvement or feature.
 
 Current function supports LASSO regression with cross-validation as implemented by the popular *glmnet* package. 
 
